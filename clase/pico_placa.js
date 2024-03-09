@@ -1,6 +1,7 @@
 var Vehiculo = /** @class */ (function () {
     function Vehiculo(Placa, Fecha, Tiempo) {
         this.DiasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+        this.Feriados = ['01/01', '12/02', '13/02', '29/03', '01/05', '24/05', '10/08', '09/10', '02/11', '03/11', '06/11', '25/11', '30/11', '31/12'];
         this.Placa = Placa;
         this.Fecha = Fecha;
         this.Tiempo = Tiempo;
@@ -15,6 +16,11 @@ var Vehiculo = /** @class */ (function () {
             "hora": parseInt(horaMinutos[0]),
             "minutos": parseInt(horaMinutos[1])
         };
+    };
+    Vehiculo.prototype.validarFeriados = function () {
+        var fechaSinAño = this.Fecha.slice(5);
+        var feriado = this.Feriados.indexOf(fechaSinAño) !== -1;
+        return feriado;
     };
     Vehiculo.prototype.validarHorarios = function () {
         var datos = this.procesarDatos();
@@ -32,8 +38,6 @@ var Vehiculo = /** @class */ (function () {
         var datos = this.procesarDatos();
         var ultimoNumero = datos['numero'];
         var diaCirculacion = datos['dia'];
-        console.log(ultimoNumero);
-        console.log(diaCirculacion);
         if ((ultimoNumero === '1' || ultimoNumero === '2') && diaCirculacion === 'Lunes') {
             return true;
         }
@@ -52,6 +56,9 @@ var Vehiculo = /** @class */ (function () {
         if (diaCirculacion === 'Sábado' || diaCirculacion === 'Domingo') {
             return true;
         }
+        if (this.validarFeriados()) {
+            return true;
+        }
         return false;
     };
     Vehiculo.prototype.validarCirculacion = function () {
@@ -66,5 +73,5 @@ var Vehiculo = /** @class */ (function () {
     };
     return Vehiculo;
 }());
-var ejecutar = new Vehiculo("IBA6049", "2024/03/08", "05:00");
+var ejecutar = new Vehiculo("IBA6049", "2024/03/11", "05:00");
 console.log(ejecutar.validarCirculacion());

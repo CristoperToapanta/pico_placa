@@ -4,6 +4,7 @@ class Vehiculo {
     Tiempo: string
     
     DiasSemana: string [] = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
+    Feriados: string[] = ['01/01', '12/02', '13/02', '29/03', '01/05', '24/05', '10/08', '09/10', '02/11', '03/11', '06/11', '25/11', '30/11', '31/12'];
 
     constructor(Placa: string, Fecha: string, Tiempo: string){
         this.Placa = Placa
@@ -26,6 +27,12 @@ class Vehiculo {
         }
     }
 
+    validarFeriados(): boolean {
+        const fechaSinAño = this.Fecha.slice(5)
+        const feriado: boolean = this.Feriados.indexOf(fechaSinAño) !== -1;
+        return feriado
+    }
+
     validarHorarios(): boolean {
         let datos: {} = this.procesarDatos();
         let hora: number = datos['hora']
@@ -43,16 +50,12 @@ class Vehiculo {
     }
 
     validarDiaPlaca(): boolean {
+
         let datos: {} = this.procesarDatos();
 
         let ultimoNumero: string = datos['numero']
         let diaCirculacion: string = datos['dia']
-
-        console.log(ultimoNumero);
-        console.log(diaCirculacion);
         
-        
-       
         if((ultimoNumero === '1' || ultimoNumero === '2') && diaCirculacion === 'Lunes'){
             return true
         }
@@ -69,6 +72,9 @@ class Vehiculo {
             return true
         }
         if(diaCirculacion === 'Sábado' || diaCirculacion === 'Domingo'){
+            return true
+        }
+        if(this.validarFeriados()){
             return true
         }
 
@@ -88,5 +94,5 @@ class Vehiculo {
     }
 }
 
-let ejecutar = new Vehiculo("IBA6049", "2024/03/08", "05:00")
+let ejecutar = new Vehiculo("IBA6049", "2024/03/11", "05:00")
 console.log(ejecutar.validarCirculacion())
